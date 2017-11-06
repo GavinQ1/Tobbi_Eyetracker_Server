@@ -42,7 +42,7 @@ def gaze_data_callback(gaze_data):
     global Eye_Tracker_Data
     left = gaze_data['left_gaze_point_on_display_area']
     right = gaze_data['right_gaze_point_on_display_area']
-    time_stamp = float("%.20f"%time.time())
+    time_stamp = float("%.5f"%tr.get_system_time_stamp())
     data = [left, right, time_stamp]
     Eye_Tracker_Data.append(data)
 
@@ -138,6 +138,7 @@ Dump data
 '''
 @app.route('/dump', methods=['POST'])
 def dump():
+    unsubscribe()
     debug("Dump to %s, %s"%(EYE_TRACKER_DATA_FILE, EVENT_DATA_FILE))
     with open(EYE_TRACKER_DATA_FILE, 'w') as f:
         for d in Eye_Tracker_Data:
@@ -153,16 +154,17 @@ mark time stamps
 '''
 @app.route('/mark', methods=['POST'])
 def mark():
-    time_stamp = time.time()
-    global Event_Data
+    time_stamp = "%.5f"%tr.get_system_time_stamp()
+    global Eye_Tracker_Data, Event_Data
     '''
     if not eyetracker:
         debug("No eyetracker found")
         return response(EYE_TRACKER_NOT_FOUND_CODE, EYE_TRACKER_NOT_FOUND_MESSAGE)
     '''
     event_type = request.get_data()
-    debug("Mark! Event: %s, Time_stamp: %.20f"%(event_type, time_stamp))
-
+    debug("Mark! Event: %s, Time_stamp: %s"%(event_type, time_stamp))
+    
+    Eye_Tracker_Data.append("\n ======================== %s =========================\n"%str([event_type, time_stamp]))
     Event_Data.append([event_type, time_stamp])
     return response(SUCCESS_CODE)
 

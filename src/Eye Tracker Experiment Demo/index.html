@@ -1,0 +1,164 @@
+
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Eye Tracker Experiment Demo </title>
+      <link href="./jsPsych/jspsych.css" rel="stylesheet" type="text/css"></link>
+      <script type="text/javascript" src="./jsPsych/jspsych.min.js"></script>
+    </head>
+    <body id="jsPsych-Window" class="jsPsych-Window">
+    </body>
+    <script>
+	function send(p, param=null) {
+	var http = new XMLHttpRequest();
+	var url = "http://127.0.0.1:5000/" + p;
+	console.log(url)
+	http.open("POST", url, true);
+	if (param) http.send(param);
+	else http.send();
+}
+send("connect")
+				send("subscribe");
+      jsPsych.init({
+        "display_element": undefined,
+        "auto_update_progress_bar": true,
+        "exclusions": {
+          "min_height": 0,
+          "min_width": 0,
+          "audio": false
+        },
+        "max_load_time": 60000,
+        "show_preload_progress_bar": true,
+        "on_data_update": function on_data_update(data) {
+          return undefined;
+        },
+        "on_finish": function() {
+          jsPsych.data.displayData();
+        },
+        "show_progress_bar": false,
+        "preload_images": [],
+        "on_trial_finish": function on_trial_finish(data) {
+          return undefined;
+        },
+        "on_interaction_data_update": function on_interaction_data_update(data) {
+          return undefined;
+        },
+        "default_iti": 0,
+        "preload_audio": [],
+        "on_trial_start": function on_trial_start(data) {
+          return undefined;
+        },
+        "timeline": [{
+          "randomize_order": true,
+          "sample": {
+            "type": null,
+            "size": null
+          },
+          "conditional_function": function a(d) {
+            return null;
+          },
+          "timeline_variables": [{
+            "V0": null
+          }],
+          "repetitions": null,
+          "loop_function": function a(d) {
+            return null;
+          },
+          "timeline": [{
+            "key_backward": "leftarrow",
+            "pages": ["<p>\nIn this experiment, a cross will appear in the screen. By clicking start, \neye-tracker will start recording you eye movements. \nPlease follow the cross.\n</p>\n<img style='width: 280px' src='assets/middle.png'></img>\n"],
+            "button_label_previous": "Previous",
+            "data": {},
+            "on_finish": function() {
+              send("mark", "Middle");
+            },
+            "allow_backward": false,
+            "button_label_next": "Start",
+            "allow_keys": false,
+            "key_forward": "rightarrow",
+            "show_clickable_nav": true,
+            "type": "instructions",
+            "post_trial_gap": null
+          }, {
+            "type": "html-keyboard-response",
+            "stimulus": " ",
+            "choices": [],
+            "prompt": "<div style='width: 100%; height: 100%'><img src='assets/middle.png' style='width: 100%; height: 100%'/></div>",
+            "stimulus_duration": -1,
+            "trial_duration": function() {
+              return jsPsych.randomization.sampleWithoutReplacement([1250, 1500, 1750, 2000], 1)[0];
+            },
+            "response_ends_trial": true,
+            "data": {},
+            "on_finish": function() {
+              send("mark", "UpLeft");
+            },
+            "post_trial_gap": null
+          }, {
+            "type": "html-keyboard-response",
+            "stimulus": " ",
+            "choices": [],
+            "prompt": "<div style='overflow: hidden;'><img style='width: 100%; height: 100%' src='assets/upLeft.png' /></div>",
+            "stimulus_duration": -1,
+            "trial_duration": function() {
+              return jsPsych.randomization.sampleWithoutReplacement([1250, 1500, 1750, 2000], 1)[0];
+            },
+            "response_ends_trial": true,
+            "data": {},
+            "on_finish": function() {
+              send("mark", "UpRight");
+            },
+            "post_trial_gap": null
+          }, {
+            "type": "html-keyboard-response",
+            "stimulus": " ",
+            "choices": [],
+            "prompt": "<div style='overflow: hidden;'><img style='width: 100%; height: 100%' src='assets/upRight.png' /></div>",
+            "stimulus_duration": -1,
+            "trial_duration": function() {
+              return jsPsych.randomization.sampleWithoutReplacement([1250, 1500, 1750, 2000], 1)[0];
+            },
+            "response_ends_trial": true,
+            "data": {},
+            "on_finish": function() {
+              send("mark", "BottomLeft");
+            },
+            "post_trial_gap": null
+          }, {
+            "type": "html-keyboard-response",
+            "stimulus": " ",
+            "choices": [],
+            "prompt": "<div style='width: 100%; height: 100%'><img style='width: 100%; height: 100%' src='assets/bottomLeft.png' /></div>",
+            "stimulus_duration": -1,
+            "trial_duration": function() {
+              return jsPsych.randomization.sampleWithoutReplacement([1250, 1500, 1750, 2000], 1)[0];
+            },
+            "response_ends_trial": true,
+            "data": {},
+            "on_finish": function() {
+              send("mark", "BottomRight");
+            },
+            "post_trial_gap": null
+          }, {
+            "type": "html-keyboard-response",
+            "stimulus": " ",
+            "choices": [],
+            "prompt": "<div style='width: 100%; height: 100%'><img style='width: 100%; height: 100%' src='assets/bottomRight.png' /></div>",
+            "stimulus_duration": -1,
+            "trial_duration": function() {
+              return jsPsych.randomization.sampleWithoutReplacement([1250, 1500, 1750, 2000], 1)[0];
+            },
+            "response_ends_trial": true,
+            "data": {},
+            "on_finish": function() {
+              send("unsubscribe");
+				send("dump");
+            },
+            "post_trial_gap": null
+          }]
+        }]
+      });
+    </script>
+  </html>
