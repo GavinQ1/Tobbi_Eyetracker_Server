@@ -103,6 +103,7 @@ def connectEyeTracker():
 disconnect to eyetracker (and unsubscribe from it if necessary)
 '''
 @app.route('/disconnect', methods=['POST', 'GET'])
+@cross_origin()
 def disconnectEyeTracker():
     global eyetracker
     unsubscribe()
@@ -113,6 +114,7 @@ def disconnectEyeTracker():
 subscribe to eyetracker data, i.e., start recording
 '''
 @app.route('/subscribe', methods=['POST', 'GET'])
+@cross_origin()
 def subscribe():
     if not eyetracker:
         debug("No eyetracker found/connected")
@@ -125,6 +127,7 @@ def subscribe():
 subscribe to eyetracker data, i.e., start recording
 '''
 @app.route('/unsubscribe', methods=['POST', 'GET'])
+@cross_origin()
 def unsubscribe():
     debug("Unsubscribe from eyetracker successfully")
     if eyetracker:
@@ -134,6 +137,7 @@ def unsubscribe():
 Clear data
 '''
 @app.route('/clear', methods=['POST', 'GET'])
+@cross_origin()
 def clear():
     global Eye_Tracker_Data, Event_Data
     Eye_Tracker_Data = []
@@ -148,6 +152,7 @@ def clear():
 Dump data
 '''
 @app.route('/dump', methods=['POST', 'GET'])
+@cross_origin()
 def dump():
     unsubscribe()
     debug("Dump to %s"%(OUTPUT))
@@ -163,6 +168,7 @@ def dump():
 mark time stamps
 '''
 @app.route('/mark', methods=['POST', 'GET'])
+@cross_origin()
 def mark():
     time_stamp = "%.5f"%tr.get_system_time_stamp()
     global Eye_Tracker_Data, Event_Data
