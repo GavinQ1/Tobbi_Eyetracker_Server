@@ -47,12 +47,13 @@ def gaze_data_callback(gaze_data):
     left = gaze_data['left_gaze_point_on_display_area']
     right = gaze_data['right_gaze_point_on_display_area']
     time_stamp = float("%.5f"%tr.get_system_time_stamp())
-    data = [left[0], left[1], right[0], right[1], time_stamp]
+    data = {"leftX": left[0], "leftY": left[1], "rightX": right[0], "rightY": right[1], "time": time_stamp}
+    flag = 1
     if __PRETTY_DATA__:
-        for i in range(0, len(data)-1):
-            if math.isnan(data[i]):
-                return
-    Eye_Tracker_Data.append(data)
+        for v in data.values():
+            flag &= not math.isnan(v)
+    if flag:
+        Eye_Tracker_Data.append(data)
 
 # Eyetracker object
 eyetracker = None
@@ -172,9 +173,10 @@ def mark():
 
     event_type = request.get_data()
     debug("Mark! Event: %s, Time_stamp: %s"%(event_type, time_stamp))
-    
-    Event_Data.append([event_type, time_stamp])
-    return response(SUCCESS_CODE, [event_type, time_stamp])
+
+    data = {'type': event_type, 'time': time_stamp}
+    Event_Data.append(data)
+    return response(SUCCESS_CODE, data)
 
 
 if __name__ == '__main__':
